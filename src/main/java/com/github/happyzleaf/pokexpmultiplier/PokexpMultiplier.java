@@ -78,6 +78,29 @@ public class PokexpMultiplier {
                 .description(Text.of("Set the default experience multiplier."))
                 .permission(PLUGIN_ID + ".default")
                 .build();
+        CommandSpec info = CommandSpec.builder()
+                .arguments(GenericArguments.optional(GenericArguments.requiringPermission(GenericArguments.player(Text.of("player")), PLUGIN_ID + ".info.others")))
+                .executor(new CommandExecutor() {
+                    @Override
+                    public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
+                        if(args.hasAny("player")) {
+                            Player player = (Player) args.getOne("player").get();
+                            src.sendMessage(Text.of(TextColors.DARK_GREEN, "[PokexpMultiplier] " + player.getName() + "'s experience multiplier should be " + quantityPerUser(player) + "."));
+                            return CommandResult.success();
+                        } else {
+                            if (src instanceof Player) {
+                                src.sendMessage(Text.of(TextColors.DARK_GREEN, "[PokexpMultiplier] Your experience multiplier should be " + quantityPerUser((Player) src) + "."));
+                                return CommandResult.success();
+                            } else {
+                                src.sendMessage(Text.of(TextColors.RED, "[PokexpMultiplier] Your MUST be ingame to execute this command."));
+                                return CommandResult.successCount(0);
+                            }
+                        }
+                    }
+                })
+                .permission(PLUGIN_ID + ".info.me")
+                .description(Text.of("Get a player's experience multiplier."))
+                .build();
         CommandSpec set = CommandSpec.builder()
                 .arguments(GenericArguments.onlyOne(GenericArguments.player(Text.of("player"))), GenericArguments.onlyOne(GenericArguments.string(Text.of("multiplier"))))
                 .executor(new CommandExecutor() {
@@ -127,6 +150,7 @@ public class PokexpMultiplier {
                 .child(reload, "reload")
                 .child(dfault, "default")
                 .child(player, "player")
+                .child(info, "info")
                 .build();
         Sponge.getGame().getCommandManager().register(this, pokexp, "pokexp", "pkexp");
 
