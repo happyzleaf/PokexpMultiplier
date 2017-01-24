@@ -51,7 +51,7 @@ public class PokexpMultiplier {
                     @Override
                     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
                         PokexpConfig.getInstance().loadConfig();
-                        src.sendMessage(Text.of(TextColors.DARK_GREEN, "[PokéxpMultiplier] Config(s) reloaded!"));
+                        src.sendMessage(Text.of(TextColors.DARK_GREEN, "[PokexpMultiplier] Config(s) reloaded!"));
                         return CommandResult.success();
                     }
                 })
@@ -67,10 +67,10 @@ public class PokexpMultiplier {
                             String multiplier = (String) args.getOne("multiplier").get();
                             PokexpConfig.getInstance().getConfig().getNode("multiplier", "default").setValue(Float.parseFloat(multiplier));
                             PokexpConfig.getInstance().saveAndLoad();
-                            src.sendMessage(Text.of(TextColors.DARK_GREEN, "[PokéxpMultiplier] The exp multiplier of " + multiplier + " has been succesfully setted as default."));
+                            src.sendMessage(Text.of(TextColors.DARK_GREEN, "[PokexpMultiplier] The exp multiplier of " + multiplier + " has been succesfully setted as default."));
                             return CommandResult.success();
                         } catch(NumberFormatException e) {
-                            src.sendMessage(Text.of(TextColors.RED, "[PokéxpMultiplier] The multiplier MUST be a number!"));
+                            src.sendMessage(Text.of(TextColors.RED, "[PokexpMultiplier] The multiplier MUST be a number!"));
                             return CommandResult.successCount(0);
                         }
                     }
@@ -88,10 +88,10 @@ public class PokexpMultiplier {
                             String multiplier = (String) args.getOne("multiplier").get();
                             PokexpConfig.getInstance().getConfig().getNode("multiplier", "users", player.getUniqueId().toString()).setValue(Float.parseFloat(multiplier));
                             PokexpConfig.getInstance().saveAndLoad();
-                            src.sendMessage(Text.of(TextColors.DARK_GREEN, "[PokéxpMultiplier] The exp multiplier of " + multiplier + " has been succesfully setted to " + player.getName() + "."));
+                            src.sendMessage(Text.of(TextColors.DARK_GREEN, "[PokexpMultiplier] The exp multiplier of " + multiplier + " has been succesfully setted to " + player.getName() + "."));
                             return CommandResult.success();
                         } catch(NumberFormatException e) {
-                            src.sendMessage(Text.of(TextColors.RED, "[PokéxpMultiplier] The multiplier MUST be a number!"));
+                            src.sendMessage(Text.of(TextColors.RED, "[PokexpMultiplier] The multiplier MUST be a number!"));
                             return CommandResult.successCount(0);
                         }
                     }
@@ -108,10 +108,10 @@ public class PokexpMultiplier {
                         if(!PokexpConfig.getInstance().getConfig().getNode("multiplier", "users", player.getUniqueId().toString()).isVirtual()) {
                             PokexpConfig.getInstance().getConfig().getNode("multiplier", "users").removeChild(player.getUniqueId().toString());
                             PokexpConfig.getInstance().saveAndLoad();
-                            player.sendMessage(Text.of(TextColors.DARK_GREEN, "[PokéxpMultiplier] Succesfully removed " + player.getName() + " from the config."));
+                            src.sendMessage(Text.of(TextColors.DARK_GREEN, "[PokexpMultiplier] Succesfully removed " + player.getName() + " from the config."));
                             return CommandResult.success();
                         } else {
-                            src.sendMessage(Text.of(TextColors.RED, "[PokéxpMultiplier] " + player.getName() + "doesn't have any custom multiplier."));
+                            src.sendMessage(Text.of(TextColors.RED, "[PokexpMultiplier] " + player.getName() + "doesn't have any custom multiplier."));
                             return CommandResult.successCount(0);
                         }
                     }
