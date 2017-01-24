@@ -56,7 +56,7 @@ public class PokexpMultiplier {
                     }
                 })
                 .description(Text.of("Reload configs."))
-                .permission(PLUGIN_ID + ".reload")
+                .permission(PLUGIN_ID + ".admin.reload")
                 .build();
         CommandSpec dfault = CommandSpec.builder()
                 .arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("multiplier"))))
@@ -76,7 +76,7 @@ public class PokexpMultiplier {
                     }
                 })
                 .description(Text.of("Set the default experience multiplier."))
-                .permission(PLUGIN_ID + ".default")
+                .permission(PLUGIN_ID + ".admin.default")
                 .build();
         CommandSpec info = CommandSpec.builder()
                 .arguments(GenericArguments.optional(GenericArguments.requiringPermission(GenericArguments.player(Text.of("player")), PLUGIN_ID + ".info.others")))
@@ -120,7 +120,7 @@ public class PokexpMultiplier {
                     }
                 })
                 .description(Text.of("Set a custom experience multiplier per player."))
-                .permission(PLUGIN_ID + ".player.set")
+                .permission(PLUGIN_ID + ".admin.player.set")
                 .build();
         CommandSpec remove = CommandSpec.builder()
                 .arguments(GenericArguments.onlyOne(GenericArguments.player(Text.of("player"))))
@@ -140,7 +140,7 @@ public class PokexpMultiplier {
                     }
                 })
                 .description(Text.of("Remove a custom experience multiplier from a player."))
-                .permission(PLUGIN_ID + ".player.remove")
+                .permission(PLUGIN_ID + ".admin.player.remove")
                 .build();
         CommandSpec player = CommandSpec.builder()
                 .child(set, "set")
