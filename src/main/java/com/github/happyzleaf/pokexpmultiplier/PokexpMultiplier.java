@@ -3,6 +3,7 @@ package com.github.happyzleaf.pokexpmultiplier;
 import com.google.inject.Inject;
 import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.api.events.ExperienceGainEvent;
+import com.pixelmonmod.pixelmon.config.PixelmonConfig;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -26,7 +27,7 @@ import org.spongepowered.api.text.format.TextColors;
 
 import java.io.File;
 
-@Plugin(id = "pokexpmultiplier", name = "ExpMultiplier", version = "1.0.0", authors = {"happyzlife"}, dependencies = {@Dependency(id = "pixelmon")})
+@Plugin(id = "pokexpmultiplier", name = "PokexpMultiplier", version = "1.0.0", authors = {"happyzlife"}, dependencies = {@Dependency(id = "pixelmon")})
 public class PokexpMultiplier {
     public static final String PLUGIN_ID = "pokexpmultiplier";
 
@@ -160,6 +161,11 @@ public class PokexpMultiplier {
     @SubscribeEvent
     public void onExperienceGain(ExperienceGainEvent event) {
         Player player = (Player) event.pokemon.getOwner();
+
+        //This is just for the message, there are no problems to multiply the exp of a max leveled pokemon
+        if(event.pokemon.getLvl().getLevel() == PixelmonConfig.maxLevel)
+            return;
+
         if(player.hasPermission(PLUGIN_ID + ".enable")) {
             int oldExp = event.experience;
 

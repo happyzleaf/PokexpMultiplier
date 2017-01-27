@@ -23,7 +23,7 @@ public class PokexpConfig {
             loadConfig();
             config.getNode("multiplier", "default").setValue(1.0f);
             config.getNode("message", "enable").setValue(true);
-            config.getNode("message", "message").setComment("You can use #POKEMON, #PLAYER, #OLD_EXP, #NEW_EXP, #MULTIPLIER.").setValue("Your experience has been multiplied from #OLD_EXP to #NEW_EXP (multiplied by #MULTIPLIER)");
+            config.getNode("message", "message").setComment("You can use #POKEMON, #PLAYER, #OLD_EXP, #NEW_EXP, #MULTIPLIER.").setValue("#PLAYER's #POKEMON experience has been multiplied from #OLD_EXP to #NEW_EXP (multiplied by #MULTIPLIER)");
             saveConfig();
         } catch (IOException e) {
             e.printStackTrace();
