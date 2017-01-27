@@ -27,7 +27,7 @@ import org.spongepowered.api.text.format.TextColors;
 
 import java.io.File;
 
-@Plugin(id = "pokexpmultiplier", name = "PokexpMultiplier", version = "1.0.0", authors = {"happyzlife"}, dependencies = {@Dependency(id = "pixelmon")})
+@Plugin(id = "pokexpmultiplier", name = "PokexpMultiplier", version = "1.0.1", authors = {"happyzlife"}, dependencies = {@Dependency(id = "pixelmon")})
 public class PokexpMultiplier {
     public static final String PLUGIN_ID = "pokexpmultiplier";
 
