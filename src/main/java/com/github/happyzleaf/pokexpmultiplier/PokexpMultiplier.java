@@ -27,7 +27,7 @@ import org.spongepowered.api.text.format.TextColors;
 
 import java.io.File;
 
-@Plugin(id = "pokexpmultiplier", name = "PokexpMultiplier", version = "1.0.1", authors = {"happyzlife"}, dependencies = {@Dependency(id = "pixelmon")})
+@Plugin(id = "pokexpmultiplier", name = "PokexpMultiplier", version = "1.0.2", authors = {"happyzlife"}, dependencies = {@Dependency(id = "pixelmon")})
 public class PokexpMultiplier {
     public static final String PLUGIN_ID = "pokexpmultiplier";
 
@@ -183,9 +183,8 @@ public class PokexpMultiplier {
     }
 
     private float quantityPerUser(Player player) {
-        String expQuantity = player.getContainingCollection().get(player.getIdentifier()).getOption("pokexp").orElse("");
+        String expQuantity = player.getContainingCollection().get(player.getIdentifier()).getOption("pokexp").orElse(null);
 
-        logger.info(player.getUniqueId().toString());
         if(!PokexpConfig.getInstance().getConfig().getNode("multiplier", "users", player.getUniqueId().toString()).isVirtual()) {
             return PokexpConfig.getInstance().getConfig().getNode("multiplier", "users", player.getUniqueId().toString()).getFloat();
         } else if(expQuantity != null && !expQuantity.isEmpty())
