@@ -1,6 +1,7 @@
 package com.github.happyzleaf.pokexpmultiplier;
 
 import net.minecraft.entity.player.EntityPlayer;
+import ninja.leaping.configurate.ConfigurationNode;
 import org.spongepowered.api.entity.living.player.Player;
 
 import java.util.Optional;
@@ -12,34 +13,35 @@ import java.util.Optional;
  * Copyright (c). All rights reserved.
  ***************************************/
 public class AlgorithmUtilities {
-	//This returns the algorithm's name
+	//Returns the algorithm's name
 	public static String algorithmPerUser(Player player) {
 		Optional<String> algorithm = player.getContainingCollection().get(player.getIdentifier()).getOption("pokexp_algorithm");
-		return algorithm.isPresent() ? algorithm.get() : PokexpConfig.getInstance().getConfig().getNode("players", "default_algorithm").getString();
+		return algorithm.isPresent() ? algorithm.get() : PokexpConfig.getInstance().getConfig().getNode("config", "default_algorithm").getString();
 	}
 	
-	//This needs the algorithm's name
+	//Needs the algorithm's name
 	public static String valuePerUser(Player player, String algorithmName) {
 		Optional<String> value = player.getContainingCollection().get(player.getIdentifier()).getOption("pokexp_value");
 		return value.isPresent() ? value.get() : PokexpConfig.getInstance().getConfig().getNode("algorithms", algorithmName, "default_value").getString();
 	}
 	
-	//This needs the algorithm's name and returns the algorithm
+	//Needs the algorithm's name and returns the actual algorithm
 	public static String parseAlgorithmWithValues(Player player, String algorithmName, int startingExp) {
 		return PokexpConfig.getInstance().getConfig().getNode("algorithms", algorithmName, "algorithm").getString()
 				.replaceAll("#PLAYER", "" + player.getName())
 				.replaceAll("#VALUE", valuePerUser(player, algorithmName))
 				.replaceAll("#POKEMON_EXP", "" + startingExp)
-				.replaceAll("#VANILLA_EXP", "" + ((EntityPlayer) player).experience)
-				.replaceAll("#VANILLA_EXP_LEVEL", "" + ((EntityPlayer) player).experienceLevel);
+				.replaceAll("#VANILLA_EXP_LEVEL", "" + ((EntityPlayer) player).experienceLevel)
+				.replaceAll("#VANILLA_EXP", "" + ((EntityPlayer) player).experience);
 	}
 	
 	public static String parseInfoWithValues(Player player, String algorithmName) {
-		return PokexpConfig.getInstance().getConfig().getNode("algorithms", algorithmName, "messages", "message").getString()
+		ConfigurationNode node = PokexpConfig.getInstance().getConfig().getNode("algorithms", algorithmName, "messages", "info");
+		return (node.isVirtual() ? PokexpConfig.getInstance().getConfig().getNode("config", "default_info").getString() : node.getString())
 				.replaceAll("#PLAYER", player.getName())
 				.replaceAll("#VALUE", valuePerUser(player, algorithmName))
-				.replaceAll("#VANILLA_EXP", "" + ((EntityPlayer) player).experience)
-				.replaceAll("#VANILLA_EXP_LEVEL", "" + ((EntityPlayer) player).experienceLevel);
+				.replaceAll("#VANILLA_EXP_LEVEL", "" + ((EntityPlayer) player).experienceLevel)
+				.replaceAll("#VANILLA_EXP", "" + ((EntityPlayer) player).experience);
 	}
 	
 	//Thanks to Boann! (http://stackoverflow.com/users/964243/boann)

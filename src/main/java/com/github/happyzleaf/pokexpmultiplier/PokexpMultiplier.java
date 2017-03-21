@@ -25,7 +25,7 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 
 import java.io.File;
 
-@Plugin(id = PokexpMultiplier.PLUGIN_ID, name = PokexpMultiplier.PLUGIN_NAME, version = "1.1.0", authors = {"happyzlife"}, dependencies = {@Dependency(id = "pixelmon")})
+@Plugin(id = PokexpMultiplier.PLUGIN_ID, name = PokexpMultiplier.PLUGIN_NAME, version = "1.1.1", authors = {"happyzlife"}, dependencies = {@Dependency(id = "pixelmon")})
 public class PokexpMultiplier {
 	public static final String PLUGIN_ID = "pokexpmultiplier";
 	public static final String PLUGIN_NAME = "PokexpMultiplier";
@@ -48,7 +48,7 @@ public class PokexpMultiplier {
 		CommandSpec reload = CommandSpec.builder()
 				.executor((src, args) -> {
 					PokexpConfig.getInstance().loadConfig();
-					src.sendMessage(Text.of(TextColors.DARK_GREEN, "[PokexpMultiplier] Config(s) reloaded!"));
+					src.sendMessage(Text.of(TextColors.DARK_GREEN, "[" + PLUGIN_NAME + "] Config(s) reloaded!"));
 					return CommandResult.success();
 				})
 				.description(Text.of("Reload configs."))
@@ -59,7 +59,6 @@ public class PokexpMultiplier {
 				.executor((src, args) -> {
 					if (args.hasAny("player")) {
 						Player player = (Player) args.getOne("player").get();
-						//TODO add the info from the algorithm
 						src.sendMessage(TextSerializers.FORMATTING_CODE.deserialize(AlgorithmUtilities.parseInfoWithValues(player, AlgorithmUtilities.algorithmPerUser(player))));
 						return CommandResult.success();
 					} else {
@@ -67,19 +66,28 @@ public class PokexpMultiplier {
 							src.sendMessage(TextSerializers.FORMATTING_CODE.deserialize(AlgorithmUtilities.parseInfoWithValues((Player) src, AlgorithmUtilities.algorithmPerUser((Player) src))));
 							return CommandResult.success();
 						} else {
-							src.sendMessage(Text.of(TextColors.RED, "[PokexpMultiplier] Your MUST be ingame to execute this command."));
+							src.sendMessage(Text.of(TextColors.RED, "[" + PLUGIN_NAME + "] Your MUST be in-game in order to execute this command."));
 							return CommandResult.successCount(0);
 						}
 					}
 				})
 				.permission(PLUGIN_ID + ".info.me")
-				.description(Text.of("Get the player's custom experience algorithm info."))
+				.description(Text.of("Get the player's experience algorithm info."))
 				.build();
 		CommandSpec pokexp = CommandSpec.builder()
 				.child(reload, "reload")
 				.child(info, "info")
 				.build();
 		Sponge.getGame().getCommandManager().register(this, pokexp, "pokexp", "pkexp");
+		
+		//Just to check if the method works well
+		/*Sponge.getGame().getCommandManager().register(this, CommandSpec.builder()
+				.arguments(GenericArguments.onlyOne(GenericArguments.remainingJoinedStrings(Text.of("operation"))))
+				.executor(((src, args) -> {
+					src.sendMessage(Text.of(TextColors.GREEN, "result: " + AlgorithmUtilities.eval((String) args.getOne("operation").get())));
+					return CommandResult.success();
+				}))
+				.build(), "math");*/
 		
 		LOGGER.info("Loaded!");
 	}
