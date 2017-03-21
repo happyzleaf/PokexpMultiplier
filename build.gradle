@@ -36,7 +36,6 @@ repositories {
 
 dependencies {
     compile 'org.spongepowered:spongeapi:5.0.0'
-    compile files('libs/Pixelmon-1.10.2-5.0.1-universal.jar')
 }
 
 processResources {

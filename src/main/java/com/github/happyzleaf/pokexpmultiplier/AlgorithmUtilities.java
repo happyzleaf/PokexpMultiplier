@@ -1,0 +1,125 @@
+package com.github.happyzleaf.pokexpmultiplier;
+
+import net.minecraft.entity.player.EntityPlayer;
+import org.spongepowered.api.entity.living.player.Player;
+
+import java.util.Optional;
+
+/***************************************
+ * PokexpMultiplier
+ * Created by happyzleaf on 21/03/2017.
+ *
+ * Copyright (c). All rights reserved.
+ ***************************************/
+public class AlgorithmUtilities {
+	//This returns the algorithm's name
+	public static String algorithmPerUser(Player player) {
+		Optional<String> algorithm = player.getContainingCollection().get(player.getIdentifier()).getOption("pokexp_algorithm");
+		return algorithm.isPresent() ? algorithm.get() : PokexpConfig.getInstance().getConfig().getNode("players", "default_algorithm").getString();
+	}
+	
+	//This needs the algorithm's name
+	public static String valuePerUser(Player player, String algorithmName) {
+		Optional<String> value = player.getContainingCollection().get(player.getIdentifier()).getOption("pokexp_value");
+		return value.isPresent() ? value.get() : PokexpConfig.getInstance().getConfig().getNode("algorithms", algorithmName, "default_value").getString();
+	}
+	
+	//This needs the algorithm's name and returns the algorithm
+	public static String parseAlgorithmWithValues(Player player, String algorithmName, int startingExp) {
+		return PokexpConfig.getInstance().getConfig().getNode("algorithms", algorithmName, "algorithm").getString()
+				.replaceAll("#PLAYER", "" + player.getName())
+				.replaceAll("#VALUE", valuePerUser(player, algorithmName))
+				.replaceAll("#POKEMON_EXP", "" + startingExp)
+				.replaceAll("#VANILLA_EXP", "" + ((EntityPlayer) player).experience)
+				.replaceAll("#VANILLA_EXP_LEVEL", "" + ((EntityPlayer) player).experienceLevel);
+	}
+	
+	public static String parseInfoWithValues(Player player, String algorithmName) {
+		return PokexpConfig.getInstance().getConfig().getNode("algorithms", algorithmName, "messages", "message").getString()
+				.replaceAll("#PLAYER", player.getName())
+				.replaceAll("#VALUE", valuePerUser(player, algorithmName))
+				.replaceAll("#VANILLA_EXP", "" + ((EntityPlayer) player).experience)
+				.replaceAll("#VANILLA_EXP_LEVEL", "" + ((EntityPlayer) player).experienceLevel);
+	}
+	
+	//Thanks to Boann! (http://stackoverflow.com/users/964243/boann)
+	public static double eval(final String str) {
+		return new Object() {
+			int pos = -1, ch;
+			
+			void nextChar() {
+				ch = (++pos < str.length()) ? str.charAt(pos) : -1;
+			}
+			
+			boolean eat(int charToEat) {
+				while (ch == ' ') nextChar();
+				if (ch == charToEat) {
+					nextChar();
+					return true;
+				}
+				return false;
+			}
+			
+			double parse() {
+				nextChar();
+				double x = parseExpression();
+				if (pos < str.length()) throw new RuntimeException("Unexpected: " + (char)ch);
+				return x;
+			}
+			
+			// Grammar:
+			// expression = term | expression `+` term | expression `-` term
+			// term = factor | term `*` factor | term `/` factor
+			// factor = `+` factor | `-` factor | `(` expression `)`
+			//        | number | functionName factor | factor `^` factor
+			
+			double parseExpression() {
+				double x = parseTerm();
+				for (;;) {
+					if      (eat('+')) x += parseTerm(); // addition
+					else if (eat('-')) x -= parseTerm(); // subtraction
+					else return x;
+				}
+			}
+			
+			double parseTerm() {
+				double x = parseFactor();
+				for (;;) {
+					if      (eat('*')) x *= parseFactor(); // multiplication
+					else if (eat('/')) x /= parseFactor(); // division
+					else return x;
+				}
+			}
+			
+			double parseFactor() {
+				if (eat('+')) return parseFactor(); // unary plus
+				if (eat('-')) return -parseFactor(); // unary minus
+				
+				double x;
+				int startPos = this.pos;
+				if (eat('(')) { // parentheses
+					x = parseExpression();
+					eat(')');
+				} else if ((ch >= '0' && ch <= '9') || ch == '.') { // numbers
+					while ((ch >= '0' && ch <= '9') || ch == '.') nextChar();
+					x = Double.parseDouble(str.substring(startPos, this.pos));
+				} else if (ch >= 'a' && ch <= 'z') { // functions
+					while (ch >= 'a' && ch <= 'z') nextChar();
+					String func = str.substring(startPos, this.pos);
+					x = parseFactor();
+					if (func.equals("sqrt")) x = Math.sqrt(x);
+					else if (func.equals("sin")) x = Math.sin(Math.toRadians(x));
+					else if (func.equals("cos")) x = Math.cos(Math.toRadians(x));
+					else if (func.equals("tan")) x = Math.tan(Math.toRadians(x));
+					else throw new RuntimeException("Unknown function: " + func);
+				} else {
+					throw new RuntimeException("Unexpected: " + (char)ch);
+				}
+				
+				if (eat('^')) x = Math.pow(x, parseFactor()); // exponentiation
+				
+				return x;
+			}
+		}.parse();
+	}
+}

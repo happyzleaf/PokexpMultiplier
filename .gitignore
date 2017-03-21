@@ -1,3 +1,9 @@
+.idea
+.gradle
+build
+libs
+run
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
