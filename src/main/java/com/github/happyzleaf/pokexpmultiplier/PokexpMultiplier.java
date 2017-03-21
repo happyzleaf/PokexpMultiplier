@@ -4,6 +4,8 @@ import com.google.inject.Inject;
 import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.api.events.ExperienceGainEvent;
 import com.pixelmonmod.pixelmon.config.PixelmonConfig;
+import net.minecraft.entity.player.EntityPlayer;
+import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -105,13 +107,16 @@ public class PokexpMultiplier {
 			int result = (int) AlgorithmUtilities.eval(AlgorithmUtilities.parseAlgorithmWithValues(player, algorithm, oldExp));
 			event.setExperience(result);
 			
-			if (!PokexpConfig.getInstance().getConfig().getNode("algorithms", algorithm, "messages", "message").isVirtual())
-				player.sendMessage(TextSerializers.FORMATTING_CODE.deserialize(PokexpConfig.getInstance().getConfig().getNode("algorithms", algorithm, "messages", "message").getString()
+			ConfigurationNode message = PokexpConfig.getInstance().getConfig().getNode("algorithms", algorithm, "messages", "message");
+			if (!message.isVirtual())
+				player.sendMessage(TextSerializers.FORMATTING_CODE.deserialize(message.getString()
 						.replaceAll("#POKEMON", event.pokemon.getName())
 						.replaceAll("#PLAYER", player.getName())
 						.replaceAll("#OLD_EXP", "" + oldExp)
 						.replaceAll("#NEW_EXP", "" + event.getExperience())
 						.replaceAll("#VALUE", "" + AlgorithmUtilities.valuePerUser(player, algorithm))
+						.replaceAll("#VANILLA_EXP_LEVEL", "" + ((EntityPlayer) player).experienceLevel)
+						.replaceAll("#VANILLA_EXP", "" + ((EntityPlayer) player).experience)
 				));
 		}
 	}
