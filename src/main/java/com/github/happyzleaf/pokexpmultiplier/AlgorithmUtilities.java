@@ -28,7 +28,6 @@ public class AlgorithmUtilities {
 	//Needs the algorithm's name and returns the actual algorithm
 	public static String parseAlgorithmWithValues(Player player, String algorithmName, int startingExp) {
 		return PokexpConfig.getInstance().getConfig().getNode("algorithms", algorithmName, "algorithm").getString()
-				.replaceAll("#PLAYER", "" + player.getName())
 				.replaceAll("#VALUE", valuePerUser(player, algorithmName))
 				.replaceAll("#POKEMON_EXP", "" + startingExp)
 				.replaceAll("#VANILLA_EXP_LEVEL", "" + ((EntityPlayer) player).experienceLevel)
@@ -45,7 +44,7 @@ public class AlgorithmUtilities {
 	}
 	
 	//Thanks to Boann! (http://stackoverflow.com/users/964243/boann)
-	public static double eval(final String str) {
+	private static double eval(final String str) {
 		return new Object() {
 			int pos = -1, ch;
 			
