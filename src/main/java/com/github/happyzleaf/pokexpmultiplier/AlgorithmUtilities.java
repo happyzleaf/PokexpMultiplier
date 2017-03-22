@@ -44,7 +44,7 @@ public class AlgorithmUtilities {
 	}
 	
 	//Thanks to Boann! (http://stackoverflow.com/users/964243/boann)
-	private static double eval(final String str) {
+	public static double eval(final String str) {
 		return new Object() {
 			int pos = -1, ch;
 			
