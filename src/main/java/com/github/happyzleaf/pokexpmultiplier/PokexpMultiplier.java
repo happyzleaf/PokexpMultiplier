@@ -27,7 +27,7 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 
 import java.io.File;
 
-@Plugin(id = PokexpMultiplier.PLUGIN_ID, name = PokexpMultiplier.PLUGIN_NAME, version = "1.1.1", authors = {"happyzlife"}, dependencies = {@Dependency(id = "pixelmon")})
+@Plugin(id = PokexpMultiplier.PLUGIN_ID, name = PokexpMultiplier.PLUGIN_NAME, version = "1.1.2", authors = {"happyzlife"}, dependencies = {@Dependency(id = "pixelmon")})
 public class PokexpMultiplier {
 	public static final String PLUGIN_ID = "pokexpmultiplier";
 	public static final String PLUGIN_NAME = "PokexpMultiplier";
@@ -50,14 +50,14 @@ public class PokexpMultiplier {
 		CommandSpec reload = CommandSpec.builder()
 				.executor((src, args) -> {
 					PokexpConfig.getInstance().loadConfig();
-					src.sendMessage(Text.of(TextColors.DARK_GREEN, "[" + PLUGIN_NAME + "] Config(s) reloaded!"));
+					src.sendMessage(Text.of(TextColors.DARK_GREEN, "[" + PLUGIN_NAME + "]", TextColors.GREEN, " Config(s) reloaded!"));
 					return CommandResult.success();
 				})
 				.description(Text.of("Reload configs."))
 				.permission(PLUGIN_ID + ".admin.reload")
 				.build();
 		CommandSpec info = CommandSpec.builder()
-				.arguments(GenericArguments.optional(GenericArguments.requiringPermission(GenericArguments.player(Text.of("player")), PLUGIN_ID + ".info.others")))
+				.arguments(GenericArguments.optional(GenericArguments.requiringPermission(GenericArguments.onlyOne(GenericArguments.player(Text.of("player"))), PLUGIN_ID + ".info.others")))
 				.executor((src, args) -> {
 					if (args.hasAny("player")) {
 						Player player = (Player) args.getOne("player").get();
@@ -68,7 +68,7 @@ public class PokexpMultiplier {
 							src.sendMessage(TextSerializers.FORMATTING_CODE.deserialize(AlgorithmUtilities.parseInfoWithValues((Player) src, AlgorithmUtilities.algorithmPerUser((Player) src))));
 							return CommandResult.success();
 						} else {
-							src.sendMessage(Text.of(TextColors.RED, "[" + PLUGIN_NAME + "] Your MUST be in-game in order to execute this command."));
+							src.sendMessage(Text.of(TextColors.DARK_RED, "[" + PLUGIN_NAME + "]", TextColors.RED, " Your MUST be in-game in order to execute this command."));
 							return CommandResult.successCount(0);
 						}
 					}
