@@ -27,7 +27,7 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 
 import java.io.File;
 
-@Plugin(id = PokexpMultiplier.PLUGIN_ID, name = PokexpMultiplier.PLUGIN_NAME, version = "1.1.2", authors = {"happyzlife"}, dependencies = {@Dependency(id = "pixelmon")})
+@Plugin(id = PokexpMultiplier.PLUGIN_ID, name = PokexpMultiplier.PLUGIN_NAME, version = "1.1.3", authors = {"happyzlife"}, dependencies = {@Dependency(id = "pixelmon")})
 public class PokexpMultiplier {
 	public static final String PLUGIN_ID = "pokexpmultiplier";
 	public static final String PLUGIN_NAME = "PokexpMultiplier";
@@ -97,10 +97,10 @@ public class PokexpMultiplier {
 	@SubscribeEvent
 	public void onExperienceGain(ExperienceGainEvent event) {
 		//This is just for the message, there are no problems to multiply the exp of a max leveled pokemon
-		if (event.pokemon.getLvl().getLevel() == PixelmonConfig.maxLevel)
+		if (event.pokemon.getLevel() == PixelmonConfig.maxLevel)
 			return;
 		
-		Player player = (Player) event.pokemon.getOwner();
+		Player player = (Player) event.pokemon.getPlayerOwner();
 		if (player.hasPermission(PLUGIN_ID + ".enable")) {
 			int oldExp = event.getExperience();
 			String algorithm = AlgorithmUtilities.algorithmPerUser(player);
@@ -110,7 +110,7 @@ public class PokexpMultiplier {
 			ConfigurationNode message = PokexpConfig.getInstance().getConfig().getNode("algorithms", algorithm, "messages", "message");
 			if (!message.isVirtual())
 				player.sendMessage(TextSerializers.FORMATTING_CODE.deserialize(message.getString()
-						.replaceAll("#POKEMON", event.pokemon.getName())
+						.replaceAll("#POKEMON", event.pokemon.getNickname())
 						.replaceAll("#PLAYER", player.getName())
 						.replaceAll("#OLD_EXP", "" + oldExp)
 						.replaceAll("#NEW_EXP", "" + event.getExperience())
