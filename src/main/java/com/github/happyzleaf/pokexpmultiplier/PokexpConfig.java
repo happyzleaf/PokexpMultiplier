@@ -26,15 +26,15 @@ public class PokexpConfig {
 			players.getNode("default_info").setValue("&3Your algorithm does not have a custom info.");
 			
 			CommentedConfigurationNode multiplier = config.getNode("algorithms", "multiplier");
-			multiplier.getNode("algorithm").setComment("You can use #VALUE, #POKEMON_EXP, #VANILLA_EXP, #VANILLA_EXP_LEVEL.").setValue("#POKEMON_EXP * #VALUE");
-			multiplier.getNode("default_value").setComment("If are going to use a custom #VALUE per user/group, be sure to enter a default one here, it has to be a number!").setValue(1.0f);
-			multiplier.getNode("messages", "message").setComment("You can use #POKEMON, #PLAYER, #VALUE, #OLD_EXP, #NEW_EXP, #VANILLA_EXP, #VANILLA_EXP_LEVEL.").setValue("&2#PLAYER's &6#POKEMON&2 experience has been multiplied from #OLD_EXP to #NEW_EXP (multiplied by #VALUE)");
-			multiplier.getNode("messages", "info").setComment("This text will be sent when a player executes /pokexp info [player], you can use #PLAYER, #VALUE, #VANILLA_EXP, #VANILLA_EXP_LEVEL.").setValue("Your experience multiplier should be #VALUE.");
+			multiplier.getNode("algorithm").setComment("You can use #VALUE, #POKEMON-EXP, #POKEMON, #PARTY-POSITION.").setValue("#POKEMON-EXP * #VALUE");
+			multiplier.getNode("default_value").setComment("If you are going to use a custom #VALUE per user/group, be sure to enter a default one here, it has to be a number!").setValue(1.0f);
+			multiplier.getNode("messages", "message").setComment("You can use #POKEMON, #PLAYER, #PARTY-POSITION, #VALUE, #OLD-EXP, #NEW-EXP.").setValue("&2#PLAYER's &6#POKEMON&2 experience has been multiplied from #OLD-EXP to #NEW-EXP (multiplied by #VALUE)");
+			multiplier.getNode("messages", "info").setComment("This text will be sent when a player executes /pokexp info [player], you can use #PLAYER, #VALUE").setValue("Your experience multiplier should be #VALUE.");
 			
-			CommentedConfigurationNode vanillaExp = config.getNode("algorithms", "multiplier_with_vanilla_exp");
-			vanillaExp.getNode("algorithm").setComment("WARNING: This returns 0 if the player has less then 1 vanilla exp level.").setValue("#POKEMON_EXP * #VANILLA_EXP_LEVEL * #VALUE");
+			CommentedConfigurationNode vanillaExp = config.getNode("algorithms", "multiplier_with_vanilla-exp");
+			vanillaExp.getNode("algorithm").setComment("WARNING: This returns 0 if the player has less then 1 vanilla exp level. Also, it uses a placeholder so if you don't have PlaceholderAPI installed it will cause problems.").setValue("#POKEMON-EXP * %player_exp% * #VALUE");
 			vanillaExp.getNode("default_value").setValue(0.5f);
-			vanillaExp.getNode("messages", "message").setValue("&9#PLAYER's &6#POKEMON&9 experience has been multiplied from #OLD_EXP to #NEW_EXP thanks to his vanilla levels!");
+			vanillaExp.getNode("messages", "message").setValue("&9#PLAYER's &6#POKEMON&9 experience has been multiplied from #OLD-EXP to #NEW-EXP thanks to his vanilla levels!");
 			
 			CommentedConfigurationNode noExp = config.getNode("algorithms", "no_exp");
 			noExp.getNode("algorithm").setValue("0");
@@ -51,8 +51,9 @@ public class PokexpConfig {
 		this.configFile = configFile;
 		if (!configFile.exists()) {
 			createConfig();
-		} else
+		} else {
 			loadConfig();
+		}
 	}
 	
 	public CommentedConfigurationNode getConfig() {

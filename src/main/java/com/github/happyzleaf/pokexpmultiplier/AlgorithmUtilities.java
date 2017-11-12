@@ -1,6 +1,6 @@
 package com.github.happyzleaf.pokexpmultiplier;
 
-import net.minecraft.entity.player.EntityPlayer;
+import com.github.happyzleaf.pokexpmultiplier.placeholder.PlaceholderUtility;
 import ninja.leaping.configurate.ConfigurationNode;
 import org.spongepowered.api.entity.living.player.Player;
 
@@ -26,21 +26,21 @@ public class AlgorithmUtilities {
 	}
 	
 	//Needs the algorithm's name and returns the actual algorithm
-	public static String parseAlgorithmWithValues(Player player, String algorithmName, int startingExp) {
-		return PokexpConfig.getInstance().getConfig().getNode("algorithms", algorithmName, "algorithm").getString()
-				.replaceAll("#VALUE", valuePerUser(player, algorithmName))
-				.replaceAll("#POKEMON_EXP", "" + startingExp)
-				.replaceAll("#VANILLA_EXP_LEVEL", "" + ((EntityPlayer) player).experienceLevel)
-				.replaceAll("#VANILLA_EXP", "" + ((EntityPlayer) player).experience);
+	public static String parseAlgorithmWithValues(Player player, String algorithmName, int startingExp, int partyPosition, String pokemonName) {
+		return PlaceholderUtility.replaceIfAvailable(PokexpConfig.getInstance().getConfig().getNode("algorithms", algorithmName, "algorithm").getString()
+					.replaceAll("#VALUE", valuePerUser(player, algorithmName))
+					.replaceAll("#POKEMON-EXP", "" + startingExp)
+					.replaceAll("#POKEMON", pokemonName)
+					.replaceAll("#PARTY-POSITION", "" + partyPosition)
+				, player);
 	}
 	
 	public static String parseInfoWithValues(Player player, String algorithmName) {
 		ConfigurationNode node = PokexpConfig.getInstance().getConfig().getNode("algorithms", algorithmName, "messages", "info");
-		return (node.isVirtual() ? PokexpConfig.getInstance().getConfig().getNode("config", "default_info").getString() : node.getString())
-				.replaceAll("#PLAYER", player.getName())
-				.replaceAll("#VALUE", valuePerUser(player, algorithmName))
-				.replaceAll("#VANILLA_EXP_LEVEL", "" + ((EntityPlayer) player).experienceLevel)
-				.replaceAll("#VANILLA_EXP", "" + ((EntityPlayer) player).experience);
+		return PlaceholderUtility.replaceIfAvailable((node.isVirtual() ? PokexpConfig.getInstance().getConfig().getNode("config", "default_info").getString() : node.getString())
+					.replaceAll("#PLAYER", player.getName())
+					.replaceAll("#VALUE", valuePerUser(player, algorithmName))
+				, player);
 	}
 	
 	//Thanks to Boann! (http://stackoverflow.com/users/964243/boann)

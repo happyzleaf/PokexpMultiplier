@@ -1,5 +1,7 @@
 package com.github.happyzleaf.pokexpmultiplier;
 
+import com.github.happyzleaf.pokexpmultiplier.placeholder.PlaceholderHelper;
+import com.github.happyzleaf.pokexpmultiplier.placeholder.PlaceholderUtility;
 import com.google.inject.Inject;
 import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.api.events.ExperienceGainEvent;
@@ -19,6 +21,7 @@ import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
+import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.text.Text;
@@ -27,12 +30,15 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 
 import java.io.File;
 
-@Plugin(id = PokexpMultiplier.PLUGIN_ID, name = PokexpMultiplier.PLUGIN_NAME, version = "1.1.3", authors = {"happyzlife"}, dependencies = {@Dependency(id = "pixelmon")})
+@Plugin(id = PokexpMultiplier.PLUGIN_ID, name = PokexpMultiplier.PLUGIN_NAME, version = "1.1.4", authors = {"happyzlife"},
+		dependencies = {@Dependency(id = "pixelmon"), @Dependency(id = "placeholderapi", version = "[4.1,)", optional = true)})
 public class PokexpMultiplier {
 	public static final String PLUGIN_ID = "pokexpmultiplier";
 	public static final String PLUGIN_NAME = "PokexpMultiplier";
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(PLUGIN_NAME);
+	
+	public static PokexpMultiplier instance;
 	
 	@Inject
 	@DefaultConfig(sharedRoot = true)
@@ -43,7 +49,13 @@ public class PokexpMultiplier {
 	ConfigurationLoader<CommentedConfigurationNode> configLoader;
 	
 	@Listener
-	public void onGameInitialization(GameInitializationEvent event) {
+	public void preInit(GamePreInitializationEvent event) {
+		instance = this;
+	}
+	
+	@Listener
+	public void init(GameInitializationEvent event) {
+		PlaceholderUtility.init();
 		PokexpConfig.getInstance().setup(configFile, configLoader);
 		Pixelmon.EVENT_BUS.register(this);
 		
@@ -104,20 +116,20 @@ public class PokexpMultiplier {
 		if (player.hasPermission(PLUGIN_ID + ".enable")) {
 			int oldExp = event.getExperience();
 			String algorithm = AlgorithmUtilities.algorithmPerUser(player);
-			int result = (int) AlgorithmUtilities.eval(AlgorithmUtilities.parseAlgorithmWithValues(player, algorithm, oldExp));
+			int result = (int) AlgorithmUtilities.eval(AlgorithmUtilities.parseAlgorithmWithValues(player, algorithm, oldExp, event.pokemon.getPartyPosition(), PlaceholderHelper.getPixelmonByPos(player, event.pokemon.getPartyPosition()).getPokemonName()));
 			event.setExperience(result);
-			
 			ConfigurationNode message = PokexpConfig.getInstance().getConfig().getNode("algorithms", algorithm, "messages", "message");
-			if (!message.isVirtual())
-				player.sendMessage(TextSerializers.FORMATTING_CODE.deserialize(message.getString()
-						.replaceAll("#POKEMON", event.pokemon.getNickname())
-						.replaceAll("#PLAYER", player.getName())
-						.replaceAll("#OLD_EXP", "" + oldExp)
-						.replaceAll("#NEW_EXP", "" + event.getExperience())
-						.replaceAll("#VALUE", "" + AlgorithmUtilities.valuePerUser(player, algorithm))
-						.replaceAll("#VANILLA_EXP_LEVEL", "" + ((EntityPlayer) player).experienceLevel)
-						.replaceAll("#VANILLA_EXP", "" + ((EntityPlayer) player).experience)
+			if (!message.isVirtual()) {
+				player.sendMessage(TextSerializers.FORMATTING_CODE.deserialize(
+						PlaceholderUtility.replaceIfAvailable(message.getString()
+							.replaceAll("#POKEMON", event.pokemon.getNickname())
+							.replaceAll("#PLAYER", player.getName())
+							.replaceAll("#PARTY-POSITION", "" + event.pokemon.getPartyPosition())
+							.replaceAll("#OLD-EXP", "" + oldExp)
+							.replaceAll("#NEW-EXP", "" + event.getExperience())
+						, player)
 				));
+			}
 		}
 	}
 }
