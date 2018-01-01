@@ -10,7 +10,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT"
+        classpath "net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT"
         classpath "gradle.plugin.org.spongepowered:spongegradle:0.6"
     }
 }
@@ -26,7 +26,6 @@ allprojects {
 apply plugin: "net.minecraftforge.gradle.forge"
 apply plugin: "org.spongepowered.plugin"
 
-//version = "v" + modVersion + " for Pixelmon " + pixelmonVersion
 version = modVersion
 group = modGroup
 archivesBaseName = modBaseName

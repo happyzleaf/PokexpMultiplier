@@ -6,7 +6,6 @@ import com.google.inject.Inject;
 import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.api.events.ExperienceGainEvent;
 import com.pixelmonmod.pixelmon.config.PixelmonConfig;
-import net.minecraft.entity.player.EntityPlayer;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
