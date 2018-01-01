@@ -30,7 +30,7 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 
 import java.io.File;
 
-@Plugin(id = PokexpMultiplier.PLUGIN_ID, name = PokexpMultiplier.PLUGIN_NAME, version = "1.1.4", authors = {"happyzlife"},
+@Plugin(id = PokexpMultiplier.PLUGIN_ID, name = PokexpMultiplier.PLUGIN_NAME, version = "1.1.5", authors = {"happyzlife"},
 		dependencies = {@Dependency(id = "pixelmon"), @Dependency(id = "placeholderapi", version = "[4.1,)", optional = true)})
 public class PokexpMultiplier {
 	public static final String PLUGIN_ID = "pokexpmultiplier";

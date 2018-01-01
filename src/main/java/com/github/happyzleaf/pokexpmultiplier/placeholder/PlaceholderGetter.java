@@ -28,12 +28,6 @@ public class PlaceholderGetter {
 	}
 	
 	String replace(String algorithm, Player player) {
-		System.out.println(algorithm);
-		System.out.println(player);
-		System.out.println(papi.replacePlaceholders(algorithm, player));
-		System.out.println(papi.replacePlaceholders(algorithm, player).toPlain());
-		System.out.println(papi.replacePlaceholders(algorithm, player).toPlainSingle());
-		System.out.println(papi.replacePlaceholders(algorithm, player));
-		return papi.replacePlaceholders(algorithm, player).toPlain();
+		return papi.replacePlaceholders(algorithm, player, null).toPlain();
 	}
 }
