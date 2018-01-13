@@ -15,13 +15,13 @@ import java.util.Optional;
 public class AlgorithmUtilities {
 	//Returns the algorithm's name
 	public static String algorithmPerUser(Player player) {
-		Optional<String> algorithm = player.getContainingCollection().get(player.getIdentifier()).getOption("pokexp_algorithm");
+		Optional<String> algorithm = player.getContainingCollection().getSubject(player.getIdentifier()).get().getOption("pokexp_algorithm");
 		return algorithm.isPresent() ? algorithm.get() : PokexpConfig.getInstance().getConfig().getNode("config", "default_algorithm").getString();
 	}
 	
 	//Needs the algorithm's name
 	public static String valuePerUser(Player player, String algorithmName) {
-		Optional<String> value = player.getContainingCollection().get(player.getIdentifier()).getOption("pokexp_value");
+		Optional<String> value = player.getContainingCollection().getSubject(player.getIdentifier()).get().getOption("pokexp_value");
 		return value.isPresent() ? value.get() : PokexpConfig.getInstance().getConfig().getNode("algorithms", algorithmName, "default_value").getString();
 	}
 	

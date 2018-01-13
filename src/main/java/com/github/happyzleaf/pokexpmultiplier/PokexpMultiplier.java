@@ -29,7 +29,7 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 
 import java.io.File;
 
-@Plugin(id = PokexpMultiplier.PLUGIN_ID, name = PokexpMultiplier.PLUGIN_NAME, version = "1.1.5", authors = {"happyzlife"},
+@Plugin(id = PokexpMultiplier.PLUGIN_ID, name = PokexpMultiplier.PLUGIN_NAME, version = "1.1.6", authors = {"happyzlife"},
 		dependencies = {@Dependency(id = "pixelmon"), @Dependency(id = "placeholderapi", version = "[4.4,)", optional = true)})
 public class PokexpMultiplier {
 	public static final String PLUGIN_ID = "pokexpmultiplier";
@@ -126,6 +126,7 @@ public class PokexpMultiplier {
 							.replaceAll("#PARTY-POSITION", "" + event.pokemon.getPartyPosition())
 							.replaceAll("#OLD-EXP", "" + oldExp)
 							.replaceAll("#NEW-EXP", "" + event.getExperience())
+							.replaceAll("#VALUE", "" + AlgorithmUtilities.valuePerUser(player, algorithm))
 						, player)
 				));
 			}
