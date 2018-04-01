@@ -108,20 +108,14 @@ public class PokexpMultiplier {
 	
 	@SubscribeEvent
 	public void onExperienceGain(ExperienceGainEvent event) {
-		if (event.pokemon == null || event.pokemon.getPlayerOwner() == null || event.pokemon.getNickname() == null) return;
-		
 		//This is just for the message, there are no problems to multiply the exp of a max leveled pokemon
-		if (event.pokemon.getLevel() == PixelmonConfig.maxLevel) return;
+		if (event.pokemon.isEgg() || event.pokemon.getLevel() == PixelmonConfig.maxLevel) return;
 		
 		Player player = (Player) event.pokemon.getPlayerOwner();
-		EntityPixelmon pixelmon = PlaceholderHelper.getPixelmonByPos(player, event.pokemon.getPartyPosition());
-		
-		if (pixelmon == null) return;
-		
 		if (player.hasPermission(PLUGIN_ID + ".enable")) {
 			int oldExp = event.getExperience();
 			String algorithm = AlgorithmUtilities.algorithmPerUser(player);
-			int result = (int) AlgorithmUtilities.eval(AlgorithmUtilities.parseAlgorithmWithValues(player, algorithm, oldExp, event.pokemon.getPartyPosition(), pixelmon.getPokemonName()));
+			int result = (int) AlgorithmUtilities.eval(AlgorithmUtilities.parseAlgorithmWithValues(player, algorithm, oldExp, event.pokemon.getPartyPosition(), PlaceholderHelper.getPixelmonByPos(player, event.pokemon.getPartyPosition()).getPokemonName()));
 			event.setExperience(result);
 			ConfigurationNode message = PokexpConfig.getInstance().getConfig().getNode("algorithms", algorithm, "messages", "message");
 			if (!message.isVirtual()) {
