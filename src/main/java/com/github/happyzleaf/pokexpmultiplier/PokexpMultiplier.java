@@ -1,16 +1,14 @@
 package com.github.happyzleaf.pokexpmultiplier;
 
-import com.github.happyzleaf.pokexpmultiplier.placeholder.PlaceholderHelper;
 import com.github.happyzleaf.pokexpmultiplier.placeholder.PlaceholderUtility;
 import com.google.inject.Inject;
 import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.api.events.ExperienceGainEvent;
 import com.pixelmonmod.pixelmon.config.PixelmonConfig;
-import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Sponge;
@@ -22,15 +20,15 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
-import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.Dependency;
+import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
 import java.io.File;
 
-@Plugin(id = PokexpMultiplier.PLUGIN_ID, name = PokexpMultiplier.PLUGIN_NAME, version = "1.1.7", authors = {"happyzlife"},
+@Plugin(id = PokexpMultiplier.PLUGIN_ID, name = PokexpMultiplier.PLUGIN_NAME, version = "1.1.8-BETA", authors = {"happyzlife"},
 		dependencies = {@Dependency(id = "pixelmon"), @Dependency(id = "placeholderapi", version = "[4.4,)", optional = true)})
 public class PokexpMultiplier {
 	public static final String PLUGIN_ID = "pokexpmultiplier";
@@ -108,28 +106,32 @@ public class PokexpMultiplier {
 	
 	@SubscribeEvent
 	public void onExperienceGain(ExperienceGainEvent event) {
-		//This is just for the message, there are no problems to multiply the exp of a max leveled pokemon
-		if (event.pokemon.isEgg() || event.pokemon.getLevel() == PixelmonConfig.maxLevel) return;
-		
-		Player player = (Player) event.pokemon.getPlayerOwner();
-		if (player.hasPermission(PLUGIN_ID + ".enable")) {
-			int oldExp = event.getExperience();
-			String algorithm = AlgorithmUtilities.algorithmPerUser(player);
-			int result = (int) AlgorithmUtilities.eval(AlgorithmUtilities.parseAlgorithmWithValues(player, algorithm, oldExp, event.pokemon.getPartyPosition(), PlaceholderHelper.getPixelmonByPos(player, event.pokemon.getPartyPosition()).getPokemonName()));
-			event.setExperience(result);
-			ConfigurationNode message = PokexpConfig.getInstance().getConfig().getNode("algorithms", algorithm, "messages", "message");
-			if (!message.isVirtual()) {
-				player.sendMessage(TextSerializers.FORMATTING_CODE.deserialize(
-						PlaceholderUtility.replaceIfAvailable(message.getString()
-							.replaceAll("#POKEMON", event.pokemon.getNickname())
-							.replaceAll("#PLAYER", player.getName())
-							.replaceAll("#PARTY-POSITION", "" + event.pokemon.getPartyPosition())
-							.replaceAll("#OLD-EXP", "" + oldExp)
-							.replaceAll("#NEW-EXP", "" + event.getExperience())
-							.replaceAll("#VALUE", "" + AlgorithmUtilities.valuePerUser(player, algorithm))
-						, player)
-				));
+		try {
+			//This is just for the message, there are no problems to multiply the exp of a max leveled pokemon
+			if (event.pokemon.isEgg() || event.pokemon.getLevel() == PixelmonConfig.maxLevel) return;
+			
+			Player player = (Player) event.pokemon.getPlayerOwner();
+			if (player.hasPermission(PLUGIN_ID + ".enable")) {
+				int oldExp = event.getExperience();
+				String algorithm = AlgorithmUtilities.algorithmPerUser(player);
+				int result = (int) AlgorithmUtilities.eval(AlgorithmUtilities.parseAlgorithmWithValues(player, algorithm, oldExp, event.pokemon.getPartyPosition(), event.pokemon.getBaseStats().pixelmonName));
+				event.setExperience(result);
+				ConfigurationNode message = PokexpConfig.getInstance().getConfig().getNode("algorithms", algorithm, "messages", "message");
+				if (!message.isVirtual()) {
+					player.sendMessage(TextSerializers.FORMATTING_CODE.deserialize(
+							PlaceholderUtility.replaceIfAvailable(message.getString()
+											.replace("#POKEMON", event.pokemon.getNickname())
+											.replace("#PLAYER", player.getName())
+											.replace("#PARTY-POSITION", "" + event.pokemon.getPartyPosition())
+											.replace("#OLD-EXP", "" + oldExp)
+											.replace("#NEW-EXP", "" + event.getExperience())
+											.replace("#VALUE", "" + AlgorithmUtilities.valuePerUser(player, algorithm))
+									, player)
+					));
+				}
 			}
+		} catch (Exception e) {
+			LOGGER.error("PokexpMultiplier has thrown an exception!", e);
 		}
 	}
 }

@@ -28,18 +28,18 @@ public class AlgorithmUtilities {
 	//Needs the algorithm's name and returns the actual algorithm
 	public static String parseAlgorithmWithValues(Player player, String algorithmName, int startingExp, int partyPosition, String pokemonName) {
 		return PlaceholderUtility.replaceIfAvailable(PokexpConfig.getInstance().getConfig().getNode("algorithms", algorithmName, "algorithm").getString()
-					.replaceAll("#VALUE", valuePerUser(player, algorithmName))
-					.replaceAll("#POKEMON-EXP", "" + startingExp)
-					.replaceAll("#POKEMON", pokemonName)
-					.replaceAll("#PARTY-POSITION", "" + partyPosition)
+					.replace("#VALUE", valuePerUser(player, algorithmName))
+					.replace("#POKEMON-EXP", "" + startingExp)
+					.replace("#POKEMON", pokemonName)
+					.replace("#PARTY-POSITION", "" + partyPosition)
 				, player);
 	}
 	
 	public static String parseInfoWithValues(Player player, String algorithmName) {
 		ConfigurationNode node = PokexpConfig.getInstance().getConfig().getNode("algorithms", algorithmName, "messages", "info");
 		return PlaceholderUtility.replaceIfAvailable((node.isVirtual() ? PokexpConfig.getInstance().getConfig().getNode("config", "default_info").getString() : node.getString())
-					.replaceAll("#PLAYER", player.getName())
-					.replaceAll("#VALUE", valuePerUser(player, algorithmName))
+					.replace("#PLAYER", player.getName())
+					.replace("#VALUE", valuePerUser(player, algorithmName))
 				, player);
 	}
 	

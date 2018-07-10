@@ -6,6 +6,10 @@ import ninja.leaping.configurate.loader.ConfigurationLoader;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Note from the Vincenzo of the future (that is me now). Literally what the fuck have I done here?
+ * Don't blame me, please, I was still trying to learn Java, someday i will rewrite this mess.
+ */
 public class PokexpConfig {
 	private static PokexpConfig instance = new PokexpConfig();
 	
