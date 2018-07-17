@@ -1,4 +1,4 @@
-package com.github.happyzleaf.pokexpmultiplier.placeholder;
+package com.happyzleaf.pokexpmultiplier.placeholder;
 
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.enums.EnumPokemon;

@@ -1,6 +1,6 @@
-package com.github.happyzleaf.pokexpmultiplier;
+package com.happyzleaf.pokexpmultiplier;
 
-import com.github.happyzleaf.pokexpmultiplier.placeholder.PlaceholderUtility;
+import com.happyzleaf.pokexpmultiplier.placeholder.PlaceholderUtility;
 import com.google.inject.Inject;
 import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.api.events.ExperienceGainEvent;
@@ -28,7 +28,7 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 
 import java.io.File;
 
-@Plugin(id = PokexpMultiplier.PLUGIN_ID, name = PokexpMultiplier.PLUGIN_NAME, version = "1.1.8-BETA", authors = {"happyzlife"},
+@Plugin(id = PokexpMultiplier.PLUGIN_ID, name = PokexpMultiplier.PLUGIN_NAME, version = "1.1.8", authors = {"happyzlife"}, url = "https://www.happyzleaf.com/",
 		dependencies = {@Dependency(id = "pixelmon"), @Dependency(id = "placeholderapi", version = "[4.4,)", optional = true)})
 public class PokexpMultiplier {
 	public static final String PLUGIN_ID = "pokexpmultiplier";
@@ -101,7 +101,7 @@ public class PokexpMultiplier {
 				}))
 				.build(), "math");*/
 		
-		LOGGER.info("Loaded!");
+		LOGGER.info("Loaded! This plugin was made by happyzleaf. (https://happyzleaf.com/)");
 	}
 	
 	@SubscribeEvent

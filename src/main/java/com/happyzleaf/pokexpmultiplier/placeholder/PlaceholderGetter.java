@@ -1,6 +1,6 @@
-package com.github.happyzleaf.pokexpmultiplier.placeholder;
+package com.happyzleaf.pokexpmultiplier.placeholder;
 
-import com.github.happyzleaf.pokexpmultiplier.PokexpMultiplier;
+import com.happyzleaf.pokexpmultiplier.PokexpMultiplier;
 import me.rojo8399.placeholderapi.PlaceholderService;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;

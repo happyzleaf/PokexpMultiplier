@@ -1,6 +1,6 @@
-package com.github.happyzleaf.pokexpmultiplier;
+package com.happyzleaf.pokexpmultiplier;
 
-import com.github.happyzleaf.pokexpmultiplier.placeholder.PlaceholderUtility;
+import com.happyzleaf.pokexpmultiplier.placeholder.PlaceholderUtility;
 import ninja.leaping.configurate.ConfigurationNode;
 import org.spongepowered.api.entity.living.player.Player;
 

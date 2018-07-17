@@ -1,4 +1,4 @@
-package com.github.happyzleaf.pokexpmultiplier;
+package com.happyzleaf.pokexpmultiplier;
 
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;

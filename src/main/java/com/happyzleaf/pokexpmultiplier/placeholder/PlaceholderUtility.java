@@ -1,4 +1,4 @@
-package com.github.happyzleaf.pokexpmultiplier.placeholder;
+package com.happyzleaf.pokexpmultiplier.placeholder;
 
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
