@@ -1,19 +1,19 @@
 package com.happyzleaf.pokexpmultiplier.placeholder;
 
-import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
-import com.pixelmonmod.pixelmon.enums.EnumPokemon;
-import com.pixelmonmod.pixelmon.storage.PixelmonStorage;
-import com.pixelmonmod.pixelmon.storage.PlayerStorage;
-import net.minecraft.entity.player.EntityPlayerMP;
+import com.pixelmonmod.pixelmon.Pixelmon;
+import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
+import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import org.spongepowered.api.entity.living.player.Player;
 
+/**
+ * I made this class as a helper for some of my placeholder's scripts. But I'm pretty sure I can get rid of it now. Anyway for now I'm gonna leave this there.
+ */
 public class PlaceholderHelper {
-	public static EntityPixelmon getPixelmonByPos(Player player, int position) {
-		PlayerStorage storage = PixelmonStorage.pokeBallManager.getPlayerStorage((EntityPlayerMP) player).orElse(null);
-		return storage == null ? null : storage.getPokemon(storage.getIDFromPosition(position), ((EntityPlayerMP) player).world);
+	public static Pokemon getPixelmonByPos(Player player, int position) {
+		return Pixelmon.storageManager.getParty(player.getUniqueId()).get(position);
 	}
 	
-	public static EnumPokemon getPokemon(String name) {
-		return EnumPokemon.getFromNameAnyCase(name);
+	public static EnumSpecies getPokemon(String name) {
+		return EnumSpecies.getFromNameAnyCase(name);
 	}
 }
