@@ -26,11 +26,10 @@ public class AlgorithmUtilities {
 	}
 	
 	//Needs the algorithm's name and returns the actual algorithm
-	public static String parseAlgorithmWithValues(Player player, String algorithmName, int startingExp, int partyPosition, String pokemonName) {
+	public static String parseAlgorithmWithValues(Player player, String algorithmName, int startingExp, int partyPosition) {
 		return PlaceholderUtility.replaceIfAvailable(PokexpConfig.getInstance().getConfig().getNode("algorithms", algorithmName, "algorithm").getString()
 					.replace("#VALUE", valuePerUser(player, algorithmName))
 					.replace("#POKEMON-EXP", "" + startingExp)
-					.replace("#POKEMON", pokemonName)
 					.replace("#PARTY-POSITION", "" + partyPosition)
 				, player);
 	}

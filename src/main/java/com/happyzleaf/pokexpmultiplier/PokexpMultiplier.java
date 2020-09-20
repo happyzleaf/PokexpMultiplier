@@ -26,35 +26,40 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 
 import java.io.File;
 
-@Plugin(id = PokexpMultiplier.PLUGIN_ID, name = PokexpMultiplier.PLUGIN_NAME, version = "1.1.9", authors = {"happyzlife"}, url = "https://www.happyzleaf.com/",
-		dependencies = {@Dependency(id = "pixelmon"), @Dependency(id = "placeholderapi", version = "[4.4,)", optional = true)})
+@Plugin(id = PokexpMultiplier.PLUGIN_ID, name = PokexpMultiplier.PLUGIN_NAME, version = PokexpMultiplier.VERSION,
+		authors = {"happyzlife"}, url = "https://www.happyzleaf.com/",
+		dependencies = {
+				@Dependency(id = "pixelmon"),
+				@Dependency(id = "placeholderapi", version = "[4.4,)", optional = true)
+		})
 public class PokexpMultiplier {
 	public static final String PLUGIN_ID = "pokexpmultiplier";
 	public static final String PLUGIN_NAME = "PokexpMultiplier";
-	
+	public static final String VERSION = "1.1.10";
+
 	public static final Logger LOGGER = LoggerFactory.getLogger(PLUGIN_NAME);
-	
+
 	public static PokexpMultiplier instance;
-	
+
 	@Inject
 	@DefaultConfig(sharedRoot = true)
 	private File configFile;
-	
+
 	@Inject
 	@DefaultConfig(sharedRoot = true)
 	ConfigurationLoader<CommentedConfigurationNode> configLoader;
-	
+
 	@Listener
 	public void preInit(GamePreInitializationEvent event) {
 		instance = this;
 	}
-	
+
 	@Listener
 	public void init(GameInitializationEvent event) {
 		PlaceholderUtility.init();
 		PokexpConfig.getInstance().setup(configFile, configLoader);
 		Pixelmon.EVENT_BUS.register(EventHandler.class);
-		
+
 		CommandSpec info = CommandSpec.builder()
 				.arguments(GenericArguments.optional(GenericArguments.requiringPermission(GenericArguments.onlyOne(GenericArguments.player(Text.of("player"))), PLUGIN_ID + ".info.others")))
 				.executor((src, args) -> {
@@ -79,10 +84,10 @@ public class PokexpMultiplier {
 				.child(info, "info")
 				.build();
 		Sponge.getGame().getCommandManager().register(this, pokexp, "pokexp", "pkexp");
-		
-		LOGGER.info("Loaded! This plugin was made by happyzleaf. (https://happyzleaf.com/)");
+
+		LOGGER.info("{} v{} Loaded! This plugin was made by happyzleaf. (https://happyzleaf.com/)", PLUGIN_NAME, VERSION);
 	}
-	
+
 	@Listener
 	public void onReload(GameReloadEvent event) {
 		PokexpConfig.getInstance().loadConfig();
